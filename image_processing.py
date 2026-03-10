@@ -111,3 +111,11 @@ def adaptive_median_filter(img, s_max=7):
                     if s > s_max:
                         output[r, c] = z_med
     return output
+
+# ─────────────────────────────────────────────
+# STEP 4 — Laplacian Sharpening
+# ─────────────────────────────────────────────
+def laplacian_sharpen(img, alpha=1.0):
+    lap = cv2.Laplacian(img, cv2.CV_64F, ksize=3)
+    sharpened = np.clip(img.astype(np.float64) + alpha * lap, 0, 255)
+    return sharpened.astype(np.uint8)
