@@ -48,3 +48,30 @@ def add_salt_pepper(gray, noise_ratio=0.25):
     noisy[pepper_coords[0], pepper_coords[1]] = 0
 
     return noisy
+
+# ─────────────────────────────────────────────
+# STEP 3a — Max Filter
+# ─────────────────────────────────────────────
+def max_filter(img, size=3):
+    return maximum_filter(img, size=size).astype(np.uint8)
+
+
+# ─────────────────────────────────────────────
+# STEP 3b — Min Filter
+# ─────────────────────────────────────────────
+def min_filter(img, size=3):
+    return minimum_filter(img, size=size).astype(np.uint8)
+
+
+# ─────────────────────────────────────────────
+# STEP 3c — Mean Filter
+# ─────────────────────────────────────────────
+def mean_filter(img, size=3):
+    return uniform_filter(img.astype(np.float32), size=size).astype(np.uint8)
+
+
+# ─────────────────────────────────────────────
+# STEP 3d — Median Filter
+# ─────────────────────────────────────────────
+def apply_median_filter(img, size=3):
+    return median_filter(img, size=size).astype(np.uint8)
