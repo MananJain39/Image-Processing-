@@ -198,3 +198,55 @@ for ax, (im, title) in zip(axes2.flat, compare):
 plt.tight_layout()
 plt.savefig("filter_comparison.png", dpi=150, bbox_inches="tight")
 plt.show()
+
+# ─────────────────────────────────────────────
+# FIGURE 3 — Laplacian Sharpening Detail
+# ─────────────────────────────────────────────
+lap_raw = cv2.Laplacian(f_amf, cv2.CV_64F, ksize=3)
+lap_vis = np.clip(lap_raw + 128, 0, 255).astype(np.uint8)
+
+fig3, axes3 = plt.subplots(1, 3, figsize=(18, 6))
+fig3.suptitle("Step 4 — Laplacian Sharpening Detail", fontsize=18, fontweight="bold")
+
+detail = [
+    (f_amf, "Input: Adaptive Median Result"),
+    (lap_vis, "Laplacian Edge Map (centred at 128)"),
+    (f_sharp, "Sharpened Output (AMF + Laplacian)"),
+]
+
+for ax, (im, title) in zip(axes3.flat, detail):
+    ax.imshow(im, cmap="gray")
+    ax.set_title(title, fontsize=13, fontweight="bold")
+    ax.axis("off")
+
+plt.tight_layout()
+plt.savefig("laplacian_sharpening.png", dpi=150, bbox_inches="tight")
+plt.show()
+
+
+# ─────────────────────────────────────────────
+# FIGURE 4 — Histograms
+# ─────────────────────────────────────────────
+fig4, axes4 = plt.subplots(2, 4, figsize=(20, 8))
+fig4.suptitle("Pixel Intensity Histograms", fontsize=17, fontweight="bold")
+
+hist_data = [
+    (gray, "Grayscale"),
+    (noisy, "Noisy (25% S&P)"),
+    (f_max, "Max Filter"),
+    (f_min, "Min Filter"),
+    (f_mean, "Mean Filter"),
+    (f_median, "Median Filter"),
+    (f_amf, "Adaptive Median"),
+    (f_sharp, "Laplacian Sharpened"),
+]
+
+for ax, (im, title) in zip(axes4.flat, hist_data):
+    ax.hist(im.ravel(), bins=64, range=(0, 255), color="steelblue", alpha=0.85)
+    ax.set_title(title, fontsize=11, fontweight="bold")
+    ax.set_xlabel("Pixel Intensity")
+    ax.set_ylabel("Frequency")
+
+plt.tight_layout()
+plt.savefig("histograms.png", dpi=150, bbox_inches="tight")
+plt.show()
