@@ -75,3 +75,39 @@ def mean_filter(img, size=3):
 # ─────────────────────────────────────────────
 def apply_median_filter(img, size=3):
     return median_filter(img, size=size).astype(np.uint8)
+
+# ─────────────────────────────────────────────
+# STEP 3e — Adaptive Median Filter
+# ─────────────────────────────────────────────
+def adaptive_median_filter(img, s_max=7):
+    padded = np.pad(img, s_max // 2, mode="reflect")
+    output = img.copy().astype(np.uint8)
+    rows, cols = img.shape
+
+    for r in range(rows):
+        for c in range(cols):
+            s = 3
+            while s <= s_max:
+                half = s // 2
+                r0 = r + (s_max // 2) - half
+                c0 = c + (s_max // 2) - half
+                window = padded[r0 : r0 + s, c0 : c0 + s].flatten()
+
+                z_min = int(window.min())
+                z_max = int(window.max())
+                z_med = int(np.median(window))
+                z_xy = int(img[r, c])
+
+                A1 = z_med - z_min
+                A2 = z_med - z_max
+
+                if A1 > 0 and A2 < 0:
+                    B1 = z_xy - z_min
+                    B2 = z_xy - z_max
+                    output[r, c] = z_xy if (B1 > 0 and B2 < 0) else z_med
+                    break
+                else:
+                    s += 2
+                    if s > s_max:
+                        output[r, c] = z_med
+    return output
