@@ -142,3 +142,59 @@ f_mean = mean_filter(noisy, size=3)
 f_median = apply_median_filter(noisy, size=3)
 f_amf = adaptive_median_filter(noisy, s_max=7)
 f_sharp = laplacian_sharpen(f_amf, alpha=1.0)
+
+# ─────────────────────────────────────────────
+# FIGURE 1 — Full Pipeline
+# ─────────────────────────────────────────────
+fig1, axes = plt.subplots(3, 3, figsize=(18, 14))
+fig1.suptitle("Image Processing Pipeline", fontsize=22, fontweight="bold")
+
+images_meta = [
+    (cv2.cvtColor(color_img, cv2.COLOR_BGR2RGB), "Step 0: Original Colour Photo", None),
+    (gray, "Step 1: Grayscale", "gray"),
+    (noisy, "Step 2: 25% Salt & Pepper Noise", "gray"),
+    (f_max, "Step 3a: Max Filter (3×3)", "gray"),
+    (f_min, "Step 3b: Min Filter (3×3)", "gray"),
+    (f_mean, "Step 3c: Mean Filter (3×3)", "gray"),
+    (f_median, "Step 3d: Median Filter (3×3)", "gray"),
+    (f_amf, "Step 3e: Adaptive Median Filter", "gray"),
+    (f_sharp, "Step 4: Laplacian Sharpened (on AMF)", "gray"),
+]
+
+for ax, (im, title, cmap) in zip(axes.flat, images_meta):
+    ax.imshow(im, cmap=cmap)
+    ax.set_title(title, fontsize=11, fontweight="bold")
+    ax.axis("off")
+
+plt.tight_layout()
+plt.savefig("pipeline_all_steps.png", dpi=150, bbox_inches="tight")
+plt.show()
+
+
+# ─────────────────────────────────────────────
+# FIGURE 2 — Filter Comparison
+# ─────────────────────────────────────────────
+fig2, axes2 = plt.subplots(2, 3, figsize=(18, 10))
+fig2.suptitle(
+    "Filter Comparison on Noisy Image (25% Salt & Pepper)",
+    fontsize=18,
+    fontweight="bold",
+)
+
+compare = [
+    (noisy, f"Noisy Input\nPSNR = {psnr(gray, noisy):.1f} dB"),
+    (f_max, f"Max Filter\nPSNR = {psnr(gray, f_max):.1f} dB"),
+    (f_min, f"Min Filter\nPSNR = {psnr(gray, f_min):.1f} dB"),
+    (f_mean, f"Mean Filter\nPSNR = {psnr(gray, f_mean):.1f} dB"),
+    (f_median, f"Median Filter\nPSNR = {psnr(gray, f_median):.1f} dB"),
+    (f_amf, f"Adaptive Median\nPSNR = {psnr(gray, f_amf):.1f} dB"),
+]
+
+for ax, (im, title) in zip(axes2.flat, compare):
+    ax.imshow(im, cmap="gray")
+    ax.set_title(title, fontsize=13, fontweight="bold")
+    ax.axis("off")
+
+plt.tight_layout()
+plt.savefig("filter_comparison.png", dpi=150, bbox_inches="tight")
+plt.show()
