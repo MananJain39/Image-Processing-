@@ -222,31 +222,3 @@ for ax, (im, title) in zip(axes3.flat, detail):
 plt.tight_layout()
 plt.savefig("laplacian_sharpening.png", dpi=150, bbox_inches="tight")
 plt.show()
-
-
-# ─────────────────────────────────────────────
-# FIGURE 4 — Histograms
-# ─────────────────────────────────────────────
-fig4, axes4 = plt.subplots(2, 4, figsize=(20, 8))
-fig4.suptitle("Pixel Intensity Histograms", fontsize=17, fontweight="bold")
-
-hist_data = [
-    (gray, "Grayscale"),
-    (noisy, "Noisy (25% S&P)"),
-    (f_max, "Max Filter"),
-    (f_min, "Min Filter"),
-    (f_mean, "Mean Filter"),
-    (f_median, "Median Filter"),
-    (f_amf, "Adaptive Median"),
-    (f_sharp, "Laplacian Sharpened"),
-]
-
-for ax, (im, title) in zip(axes4.flat, hist_data):
-    ax.hist(im.ravel(), bins=64, range=(0, 255), color="steelblue", alpha=0.85)
-    ax.set_title(title, fontsize=11, fontweight="bold")
-    ax.set_xlabel("Pixel Intensity")
-    ax.set_ylabel("Frequency")
-
-plt.tight_layout()
-plt.savefig("histograms.png", dpi=150, bbox_inches="tight")
-plt.show()
