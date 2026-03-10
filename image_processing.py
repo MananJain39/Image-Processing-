@@ -119,3 +119,12 @@ def laplacian_sharpen(img, alpha=1.0):
     lap = cv2.Laplacian(img, cv2.CV_64F, ksize=3)
     sharpened = np.clip(img.astype(np.float64) + alpha * lap, 0, 255)
     return sharpened.astype(np.uint8)
+
+# ─────────────────────────────────────────────
+# PSNR helper
+# ─────────────────────────────────────────────
+def psnr(original, filtered):
+    mse = np.mean((original.astype(np.float64) - filtered.astype(np.float64)) ** 2)
+    if mse == 0:
+        return float("inf")
+    return 20 * np.log10(255.0 / np.sqrt(mse))
