@@ -128,3 +128,17 @@ def psnr(original, filtered):
     if mse == 0:
         return float("inf")
     return 20 * np.log10(255.0 / np.sqrt(mse))
+
+# ═════════════════════════════════════════════
+# MAIN — Run the pipeline
+# ═════════════════════════════════════════════
+np.random.seed(42)
+
+gray = to_grayscale(color_img)
+noisy = add_salt_pepper(gray, noise_ratio=0.25)
+f_max = max_filter(noisy, size=3)
+f_min = min_filter(noisy, size=3)
+f_mean = mean_filter(noisy, size=3)
+f_median = apply_median_filter(noisy, size=3)
+f_amf = adaptive_median_filter(noisy, s_max=7)
+f_sharp = laplacian_sharpen(f_amf, alpha=1.0)
